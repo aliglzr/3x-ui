@@ -13,11 +13,12 @@ import (
 	"x-ui/database"
 	"x-ui/logger"
 	"x-ui/sub"
+	"x-ui/util/crypto"
 	"x-ui/web"
 	"x-ui/web/global"
 	"x-ui/web/service"
-	"x-ui/util/crypto"
 
+	"github.com/joho/godotenv"
 	"github.com/op/go-logging"
 )
 
@@ -39,7 +40,12 @@ func runWebServer() {
 		log.Fatalf("Unknown log level: %v", config.GetLogLevel())
 	}
 
-	err := database.InitDB(config.GetDBPath())
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	err = database.InitDB(config.GetDBPath())
 	if err != nil {
 		log.Fatalf("Error initializing database: %v", err)
 	}
